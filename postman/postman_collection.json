@@ -1,0 +1,97 @@
+{
+  "info": {
+    "name": "Angular CRUD API - Produtos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "produtoId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "1. GET - Listar produtos (200)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status 200', () => pm.response.to.have.status(200));",
+        "pm.test('Retorna um array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+      ] } }],
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/products" }
+    },
+    {
+      "name": "2. GET - Consultar produto por ID (200)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status 200', () => pm.response.to.have.status(200));"
+      ] } }],
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/products/1" }
+    },
+    {
+      "name": "3. GET - Produto inexistente (404)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status 404', () => pm.response.to.have.status(404));"
+      ] } }],
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/products/9999" }
+    },
+    {
+      "name": "4. POST - Cadastrar produto (201)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status 201', () => pm.response.to.have.status(201));",
+        "pm.collectionVariables.set('produtoId', pm.response.json().id);"
+      ] } }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Controle Wireless\",\n  \"descricao\": \"Controle sem fio para jogos.\",\n  \"categoria\": \"Jogos\",\n  \"preco\": 349.9,\n  \"imagem\": \"\"\n}" },
+        "url": "{{baseUrl}}/api/products"
+      }
+    },
+    {
+      "name": "5. POST - Dados invalidos (400)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status 400', () => pm.response.to.have.status(400));"
+      ] } }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"nome\": \"\",\n  \"preco\": 0\n}" },
+        "url": "{{baseUrl}}/api/products"
+      }
+    },
+    {
+      "name": "6. PUT - Atualizar produto (200)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status 200', () => pm.response.to.have.status(200));"
+      ] } }],
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"nome\": \"Controle Wireless\",\n  \"descricao\": \"Controle sem fio para jogos.\",\n  \"categoria\": \"Jogos\",\n  \"preco\": 299.9,\n  \"imagem\": \"\"\n}" },
+        "url": "{{baseUrl}}/api/products/{{produtoId}}"
+      }
+    },
+    {
+      "name": "7. PUT - Produto inexistente (404)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status 404', () => pm.response.to.have.status(404));"
+      ] } }],
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"nome\": \"X\",\n  \"descricao\": \"X\",\n  \"categoria\": \"Jogos\",\n  \"preco\": 10,\n  \"imagem\": \"\"\n}" },
+        "url": "{{baseUrl}}/api/products/9999"
+      }
+    },
+    {
+      "name": "8. DELETE - Excluir produto (204)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status 204', () => pm.response.to.have.status(204));"
+      ] } }],
+      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/products/{{produtoId}}" }
+    },
+    {
+      "name": "9. DELETE - Produto inexistente (404)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": [
+        "pm.test('Status 404', () => pm.response.to.have.status(404));"
+      ] } }],
+      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/products/9999" }
+    }
+  ]
+}
